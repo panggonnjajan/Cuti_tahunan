@@ -3,25 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Cuti Dedi - Live Sync</title>
+    <title>Laporan Cuti - Ahmad Dedi Ariansyah</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f8fafc; color: #334155; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .header { background-color: #1e293b; color: #ffffff; padding: 24px; border-radius: 8px 8px 0 0; border-bottom: 4px solid #0ea5e9; }
-        .header h1 { margin: 0; font-size: 20px; }
-        .header p { margin: 6px 0 0 0; font-size: 13px; color: #94a3b8; }
-        .card { background: #ffffff; border-radius: 0 0 8px 8px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
-        .stat-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; text-align: center; }
-        .stat-box .number { font-size: 22px; font-weight: bold; color: #0ea5e9; }
-        .stat-box .label { font-size: 11px; color: #64748b; text-transform: uppercase; }
-        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-        th { background-color: #f1f5f9; color: #475569; text-align: left; padding: 10px 12px; font-size: 12px; border-bottom: 2px solid #cbd5e1; }
-        td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f1f5f9; 
+            color: #334155; 
+            margin: 0; 
+            padding: 40px 20px; 
+        }
+        .container { max-width: 850px; margin: 0 auto; }
+        
+        .header { 
+            background-color: #1e293b; 
+            color: #ffffff; 
+            padding: 28px; 
+            border-radius: 12px 12px 0 0; 
+            border-bottom: 4px solid #0ea5e9; 
+        }
+        .header h1 { 
+            margin: 0; 
+            font-size: 22px; 
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .header-info { 
+            margin-top: 12px; 
+            font-size: 13.5px; 
+            color: #cbd5e1; 
+            line-height: 1.6;
+        }
+        .header-info strong { color: #ffffff; }
+
+        .card { 
+            background: #ffffff; 
+            border-radius: 0 0 12px 12px; 
+            padding: 28px; 
+            border: 1px solid #e2e8f0; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02); 
+        }
+
+        .summary-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 16px; 
+            margin-bottom: 28px; 
+        }
+        .stat-box { 
+            background: #f8fafc; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 8px; 
+            padding: 16px 12px; 
+            text-align: center; 
+        }
+        .stat-box .number { 
+            font-size: 26px; 
+            font-weight: 700; 
+            color: #0ea5e9; 
+        }
+        .stat-box .label { 
+            font-size: 11px; 
+            color: #64748b; 
+            font-weight: 600;
+            margin-top: 4px;
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        th { 
+            background-color: #f1f5f9; 
+            color: #475569; 
+            text-align: left; 
+            padding: 12px; 
+            font-size: 13px; 
+            font-weight: 600;
+            border-bottom: 2px solid #cbd5e1; 
+        }
+        td { 
+            padding: 14px 12px; 
+            border-bottom: 1px solid #f1f5f9; 
+            font-size: 14px; 
+        }
+        
         .text-center { text-align: center; }
-        .badge { background-color: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-        #loading { text-align: center; padding: 20px; color: #64748b; }
+        .badge { 
+            background-color: #e0f2fe; 
+            color: #0369a1; 
+            padding: 5px 12px; 
+            border-radius: 16px; 
+            font-size: 12px; 
+            font-weight: 600; 
+            display: inline-block;
+        }
+        
+        #loading { text-align: center; padding: 30px; color: #64748b; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -29,11 +106,14 @@
 <div class="container">
     <div class="header">
         <h1>LAPORAN REKAPITULASI CUTI KARYAWAN</h1>
-        <p>Nama: <strong>Dedi</strong> | Periode: Kontrak 2026 (Live Data)</p>
+        <div class="header-info">
+            Nama: <strong>Ahmad Dedi Ariansyah</strong> | Unit: <strong>REGIONAL SOLUTION & OPERATION II</strong><br>
+            Periode: <strong>Kontrak 2026 (Live Data)</strong>
+        </div>
     </div>
 
     <div class="card">
-        <div id="loading">Memuat data dari Google Sheets...</div>
+        <div id="loading">Memuat data terbaru dari Google Sheets...</div>
         
         <div id="content" style="display: none;">
             <div class="summary-grid">
