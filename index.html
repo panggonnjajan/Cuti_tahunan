@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Cuti - Ahmad Dedi Ariansyah</title>
+    <title>Laporan Rekapitulasi Cuti Karyawan</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f1f5f9; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f8fafc; 
             color: #334155; 
             margin: 0; 
-            padding: 40px 20px; 
+            padding: 30px 20px; 
         }
-        .container { max-width: 850px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; }
         
         .header { 
             background-color: #1e293b; 
             color: #ffffff; 
-            padding: 28px; 
+            padding: 24px 28px; 
             border-radius: 12px 12px 0 0; 
             border-bottom: 4px solid #0ea5e9; 
         }
         .header h1 { 
             margin: 0; 
-            font-size: 22px; 
+            font-size: 20px; 
             font-weight: 700;
             letter-spacing: 0.5px;
         }
         .header-info { 
-            margin-top: 12px; 
+            margin-top: 10px; 
             font-size: 13.5px; 
             color: #cbd5e1; 
             line-height: 1.6;
@@ -41,62 +41,106 @@
             border-radius: 0 0 12px 12px; 
             padding: 28px; 
             border: 1px solid #e2e8f0; 
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02); 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); 
         }
 
-        .summary-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 16px; 
-            margin-bottom: 28px; 
+        /* Section Header dengan aksen garis biru */
+        .section-header {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 16px;
         }
-        .stat-box { 
-            background: #f8fafc; 
-            border: 1px solid #e2e8f0; 
-            border-radius: 8px; 
-            padding: 16px 12px; 
-            text-align: center; 
-        }
-        .stat-box .number { 
-            font-size: 26px; 
-            font-weight: 700; 
-            color: #0ea5e9; 
-        }
-        .stat-box .label { 
-            font-size: 11px; 
-            color: #64748b; 
-            font-weight: 600;
-            margin-top: 4px;
-            text-transform: uppercase; 
-            letter-spacing: 0.5px;
+        .section-header::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 18px;
+            background-color: #0ea5e9;
+            margin-right: 10px;
+            border-radius: 2px;
         }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-        th { 
-            background-color: #f1f5f9; 
-            color: #475569; 
-            text-align: left; 
-            padding: 12px; 
-            font-size: 13px; 
+        /* Summary Table Styling (Gambar 2) */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 28px;
+            border: 1px solid #e2e8f0;
+        }
+        .summary-table td {
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+        .summary-table td.label-cell {
+            background-color: #f8fafc;
+            color: #334155;
+            font-weight: 500;
+            width: 25%;
+        }
+        .summary-table td.value-cell {
+            background-color: #ffffff;
+            color: #0f172a;
             font-weight: 600;
-            border-bottom: 2px solid #cbd5e1; 
+            width: 25%;
         }
-        td { 
-            padding: 14px 12px; 
-            border-bottom: 1px solid #f1f5f9; 
-            font-size: 14px; 
+        .highlight-blue {
+            color: #0ea5e9 !important;
+            font-weight: 700 !important;
         }
-        
-        .text-center { text-align: center; }
-        .badge { 
-            background-color: #e0f2fe; 
-            color: #0369a1; 
-            padding: 5px 12px; 
-            border-radius: 16px; 
-            font-size: 12px; 
-            font-weight: 600; 
+        .badge-status {
+            background-color: #e0f2fe;
+            color: #0284c7;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
             display: inline-block;
         }
+
+        /* Sub Heading untuk Detail Table */
+        .sub-header {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+        }
+
+        /* Detail Table Styling */
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #e2e8f0;
+        }
+        .detail-table th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 12px 16px;
+            border-bottom: 2px solid #cbd5e1;
+            letter-spacing: 0.5px;
+        }
+        .detail-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+        .badge-cuti {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
         
         #loading { text-align: center; padding: 30px; color: #64748b; font-size: 14px; }
     </style>
@@ -113,32 +157,41 @@
     </div>
 
     <div class="card">
-        <div id="loading">Memuat data terbaru dari Google Sheets...</div>
-        
-        <div id="content" style="display: none;">
-            <div class="summary-grid">
-                <div class="stat-box">
-                    <div class="number" id="stat-awal">12</div>
-                    <div class="label">Jatah Cuti Awal</div>
-                </div>
-                <div class="stat-box">
-                    <div class="number" id="stat-diambil">0</div>
-                    <div class="label">Cuti Diambil</div>
-                </div>
-                <div class="stat-box">
-                    <div class="number" id="stat-sisa">12</div>
-                    <div class="label">Sisa Cuti</div>
-                </div>
-            </div>
+        <div id="loading">Memuat data dari Google Sheets...</div>
 
-            <table>
+        <div id="content" style="display: none;">
+            <!-- Judul Ringkasan bergaya Gambar 2 -->
+            <div class="section-header">Ringkasan Cuti Kontrak 2026</div>
+
+            <!-- Tabel Ringkasan (Pengganti 3 Kotak Sebelumnya) -->
+            <table class="summary-table">
+                <tr>
+                    <td class="label-cell">Jatah Cuti Awal</td>
+                    <td class="value-cell" id="stat-awal">12 Hari</td>
+                    <td class="label-cell">Total Cuti Diambil</td>
+                    <td class="value-cell" id="stat-diambil">0 Hari</td>
+                </tr>
+                <tr>
+                    <td class="label-cell">Sisa Cuti Terakhir</td>
+                    <td class="value-cell highlight-blue" id="stat-sisa">12 Hari</td>
+                    <td class="label-cell">Status Kontrak</td>
+                    <td class="value-cell">
+                        <span class="badge-status">Berjalan</span>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="sub-header">Detail Pengambilan Cuti</div>
+
+            <!-- Tabel Detail -->
+            <table class="detail-table">
                 <thead>
                     <tr>
-                        <th class="text-center" style="width: 10%;">No</th>
-                        <th>Tanggal</th>
-                        <th>Jenis Cuti</th>
-                        <th class="text-center">Jumlah</th>
-                        <th class="text-center">Sisa</th>
+                        <th class="text-center" style="width: 8%;">NO</th>
+                        <th style="width: 25%;">TANGGAL</th>
+                        <th class="text-center" style="width: 35%;">JENIS CUTI</th>
+                        <th class="text-right" style="width: 16%;">JUMLAH CUTI</th>
+                        <th class="text-right" style="width: 16%;">SISA CUTI</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
@@ -189,17 +242,17 @@
                         tr.innerHTML = `
                             <td class="text-center">${no++}</td>
                             <td>${tgl}</td>
-                            <td><span class="badge">${jenis}</span></td>
-                            <td class="text-center">${jumlah} hari</td>
-                            <td class="text-center">${!isNaN(sisa) ? sisa : '-'} hari</td>
+                            <td class="text-center"><span class="badge-cuti">${jenis}</span></td>
+                            <td class="text-right">${jumlah} hari</td>
+                            <td class="text-right">${!isNaN(sisa) ? sisa : '-'} hari</td>
                         `;
                         tableBody.appendChild(tr);
                     }
                 }
             });
 
-            document.getElementById('stat-diambil').innerText = totalDiambil;
-            document.getElementById('stat-sisa').innerText = sisaTerakhir;
+            document.getElementById('stat-diambil').innerText = `${totalDiambil} Hari`;
+            document.getElementById('stat-sisa').innerText = `${sisaTerakhir} Hari`;
             document.getElementById('loading').style.display = 'none';
             document.getElementById('content').style.display = 'block';
         })
