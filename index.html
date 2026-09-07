@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Cuti Dedi - Live Sync</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f8fafc; color: #334155; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { background-color: #1e293b; color: #ffffff; padding: 24px; border-radius: 8px 8px 0 0; border-bottom: 4px solid #0ea5e9; }
+        .header h1 { margin: 0; font-size: 20px; }
+        .header p { margin: 6px 0 0 0; font-size: 13px; color: #94a3b8; }
+        .card { background: #ffffff; border-radius: 0 0 8px 8px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 24px; }
+        .stat-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; text-align: center; }
+        .stat-box .number { font-size: 22px; font-weight: bold; color: #0ea5e9; }
+        .stat-box .label { font-size: 11px; color: #64748b; text-transform: uppercase; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        th { background-color: #f1f5f9; color: #475569; text-align: left; padding: 10px 12px; font-size: 12px; border-bottom: 2px solid #cbd5e1; }
+        td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
+        .text-center { text-align: center; }
+        .badge { background-color: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+        #loading { text-align: center; padding: 20px; color: #64748b; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>LAPORAN REKAPITULASI CUTI KARYAWAN</h1>
+        <p>Nama: <strong>Dedi</strong> | Periode: Kontrak 2026 (Live Data)</p>
+    </div>
+
+    <div class="card">
+        <div id="loading">Memuat data dari Google Sheets...</div>
+        
+        <div id="content" style="display: none;">
+            <div class="summary-grid">
+                <div class="stat-box">
+                    <div class="number" id="stat-awal">12</div>
+                    <div class="label">Jatah Cuti Awal</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="stat-diambil">0</div>
+                    <div class="label">Cuti Diambil</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="stat-sisa">12</div>
+                    <div class="label">Sisa Cuti</div>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 10%;">No</th>
+                        <th>Tanggal</th>
+                        <th>Jenis Cuti</th>
+                        <th class="text-center">Jumlah</th>
+                        <th class="text-center">Sisa</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSGf1Cdj94vgGL4oUaXQ23ti-oSwbZXLUqX3fKBDGba6ZDDytiB8qayIdO6GBLAWdWogYY6ytg2PfBC/pub?gid=681195845&single=true&output=csv';
+
+    fetch(csvUrl)
+        .then(response => {
+            if (!response.ok) throw new Error('Gagal mengambil CSV');
+            return response.text();
+        })
+        .then(csvText => {
+            const lines = csvText.split('\n');
+            const tableBody = document.getElementById('table-body');
+            tableBody.innerHTML = '';
+
+            let isKontrak2026 = false;
+            let totalDiambil = 0;
+            let sisaTerakhir = 12;
+            let no = 1;
+
+            lines.forEach(line => {
+                const cols = line.split(',').map(col => col.trim().replace(/^"|"$/g, ''));
+                const rowText = line.toUpperCase();
+
+                if (rowText.includes('KONTRAK 2026')) {
+                    isKontrak2026 = true;
+                    return;
+                }
+
+                if (isKontrak2026 && cols.length >= 4) {
+                    const tgl = cols[1] || '';
+                    const jenis = cols[2] || '';
+                    const jumlah = parseInt(cols[3], 10);
+                    const sisa = parseInt(cols[4], 10);
+
+                    if (tgl && jenis && !isNaN(jumlah) && jenis !== 'CUTI' && jenis !== 'JATAH CUTI') {
+                        totalDiambil += jumlah;
+                        if (!isNaN(sisa)) sisaTerakhir = sisa;
+
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td class="text-center">${no++}</td>
+                            <td>${tgl}</td>
+                            <td><span class="badge">${jenis}</span></td>
+                            <td class="text-center">${jumlah} hari</td>
+                            <td class="text-center">${!isNaN(sisa) ? sisa : '-'} hari</td>
+                        `;
+                        tableBody.appendChild(tr);
+                    }
+                }
+            });
+
+            document.getElementById('stat-diambil').innerText = totalDiambil;
+            document.getElementById('stat-sisa').innerText = sisaTerakhir;
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        })
+        .catch(err => {
+            document.getElementById('loading').innerText = 'Gagal memuat data dari Google Sheets.';
+            console.error(err);
+        });
+</script>
+
+</body>
+</html>
